@@ -1,70 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:fillViewport="true"
     android:background="@android:color/white">
 
-    <!-- Панель управления -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="8dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Панель управления -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Clusters:"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:paddingEnd="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp">
 
-        <SeekBar
-            android:id="@+id/clusterSeekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="10"
-            android:progress="2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points:"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:paddingEnd="8dp" />
 
-        <TextView
-            android:id="@+id/clusterCountText"
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/pointsInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Enter number of points"
+                android:inputType="number"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:text="100"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/regenerateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regenerate"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                android:padding="8dp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:paddingStart="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clusters:"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:paddingEnd="8dp" />
+
+            <SeekBar
+                android:id="@+id/clusterSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="19"
+                android:progress="2" />
+
+            <TextView
+                android:id="@+id/clusterCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:paddingStart="8dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/runClusteringButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run Clustering"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- График "до кластеризации" -->
+        <com.github.mikephil.charting.charts.ScatterChart
+            android:id="@+id/chartBefore"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <!-- График "после кластеризации" -->
+        <com.github.mikephil.charting.charts.ScatterChart
+            android:id="@+id/chartAfter"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@android:color/white" />
+
     </LinearLayout>
-
-    <Button
-        android:id="@+id/runClusteringButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Run Clustering"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- График "до кластеризации" -->
-    <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/chartBefore"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white" />
-
-    <!-- График "после кластеризации" -->
-    <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/chartAfter"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white" />
-
-</LinearLayout>
+</ScrollView>

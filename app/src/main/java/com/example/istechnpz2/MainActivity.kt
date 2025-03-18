@@ -3,6 +3,7 @@ package com.example.istechnpz2
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clusterSeekBar: SeekBar
     private lateinit var clusterCountText: TextView
     private lateinit var runClusteringButton: Button
+    private lateinit var regenerateButton: Button
+    private lateinit var pointsInput: EditText
+
+    private var dataPoints = listOf<Entry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         clusterSeekBar = findViewById(R.id.clusterSeekBar)
         clusterCountText = findViewById(R.id.clusterCountText)
         runClusteringButton = findViewById(R.id.runClusteringButton)
+        regenerateButton = findViewById(R.id.regenerateButton)
+        pointsInput = findViewById(R.id.pointsInput)
 
         // Обновление текста при изменении SeekBar
         clusterSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -44,13 +51,15 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // Генерация начальных данных
-        val dataPoints = generateRandomData(100, 0f, 10f)
+        // Перегенерация точек
+        regenerateButton.setOnClickListener {
+            val pointsCount = pointsInput.text.toString().toIntOrNull() ?: 100
+            dataPoints = generateRandomData(pointsCount, 0f, 10f)
+            setupScatterChart(chartBefore, listOf(dataPoints), "Before Clustering")
+            chartAfter.clear()
+        }
 
-        // Построение графика "до кластеризации"
-        setupScatterChart(chartBefore, listOf(dataPoints), "Before Clustering")
-
-        // Обработчик кнопки "Run Clustering"
+        // Запуск кластеризации
         runClusteringButton.setOnClickListener {
             val k = clusterSeekBar.progress + 1 // Получаем количество кластеров из SeekBar
             val clusters = performKMeans(dataPoints, k, maxIterations = 10)
@@ -58,6 +67,10 @@ class MainActivity : AppCompatActivity() {
             // Построение графика "после кластеризации"
             setupScatterChart(chartAfter, clusters, "After Clustering")
         }
+
+        // Генерация начальных данных
+        dataPoints = generateRandomData(100, 0f, 10f)
+        setupScatterChart(chartBefore, listOf(dataPoints), "Before Clustering")
     }
 
     /**
@@ -77,25 +90,36 @@ class MainActivity : AppCompatActivity() {
      * Настройка ScatterChart.
      */
     private fun setupScatterChart(chart: ScatterChart, clusters: List<List<Entry>>, title: String) {
-        val colors = listOf(
-            Color.RED,
-            Color.BLUE,
-            Color.GREEN,
-            Color.YELLOW,
-            Color.MAGENTA,
-            Color.CYAN,
-            Color.BLACK,
-            Color.WHITE,
-            Color.parseColor("#FFA500"), // Оранжевый
-            Color.parseColor("#800080"), // Пурпурный
-            Color.parseColor("#008000"), // Темно-зеленый
-            Color.parseColor("#FF4500"), // Оранжево-красный
-            Color.parseColor("#00FFFF"), // Бирюзовый
-            Color.parseColor("#FF69B4"), // Ярко-розовый
-            Color.parseColor("#8B4513"), // Коричневый
-            Color.parseColor("#2E8B57"), // Изумрудный
-            Color.parseColor("#FFD700")  // Золотой
-        )
+            val colors = listOf(
+                Color.RED,
+                Color.BLUE,
+                Color.GREEN,
+                Color.YELLOW,
+                Color.MAGENTA,
+                Color.CYAN,
+                Color.BLACK,
+                Color.GRAY,
+                Color.parseColor("#FFA500"), // Оранжевый
+                Color.parseColor("#800080"), // Пурпурный
+                Color.parseColor("#008000"), // Темно-зеленый
+                Color.parseColor("#FF4500"), // Оранжево-красный
+                Color.parseColor("#00FFFF"), // Бирюзовый
+                Color.parseColor("#FF69B4"), // Ярко-розовый
+                Color.parseColor("#8B4513"), // Коричневый
+                Color.parseColor("#2E8B57"), // Изумрудный
+                Color.parseColor("#FFD700"), // Золотой
+                Color.parseColor("#FF1493"), // Глубокий розовый
+                Color.parseColor("#ADFF2F"), // Зеленый лайм
+                Color.parseColor("#1E90FF"), // Ярко-синий
+                Color.parseColor("#FF6347"), // Томатный
+                Color.parseColor("#9400D3"), // Темно-фиолетовый
+                Color.parseColor("#32CD32"), // Лайм-зеленый
+                Color.parseColor("#FF8C00"), // Темно-оранжевый
+                Color.parseColor("#4B0082"), // Индиго
+                Color.parseColor("#FA8072"), // Лососевый
+                Color.parseColor("#00FA9A"), // Средне-весенний зеленый
+                Color.parseColor("#DB7093")  // Светло-пурпурный
+            )
         val dataSets = mutableListOf<ScatterDataSet>()
 
         // Создаем отдельный ScatterDataSet для каждого кластера
